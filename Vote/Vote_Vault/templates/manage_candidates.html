@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Manage Candidates - VoteVault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(180deg, #004d40 0%, #002f4b 100%);
+      color: #fff;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    h2 {
+      color: #f1c40f;
+      font-family: 'Press Start 2P', cursive;
+      margin-bottom: 20px;
+    }
+    .container {
+      background: #00332f;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      max-width: 600px;
+      width: 90%;
+    }
+    form, ul {
+      margin-bottom: 30px;
+      text-align: left; /* Align text to the left for better readability */
+    }
+    label {
+      font-weight: 600;
+      color: #f7dc6f;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #f39c12;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      margin-bottom: 15px;
+    }
+    .btn-custom {
+      background: linear-gradient(135deg, #ffd369, #b8860b);
+      border: none;
+      border-radius: 30px;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #3b2f00;
+      box-shadow: 0 4px 15px rgba(218, 165, 32, 0.7);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .btn-custom:hover,
+    .btn-custom:focus {
+      background: linear-gradient(135deg, #b8860b, #7a5200);
+      box-shadow: 0 6px 20px rgba(184, 134, 11, 0.85);
+      outline: none;
+      color: #fff;
+    }
+    .candidate-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .logout-link {
+      margin-top: 20px;
+      color: #ffd369;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .logout-link:hover {
+      color: #b8860b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Manage Candidates</h2>
+    <form method="post">
+      <label for="candidate_name">Candidate Name:</label>
+      <input type="text" name="candidate_name" id="candidate_name" required>
+      <button type="submit" name="action" value="add" class="btn-custom">Add Candidate</button>
+    </form>
+    <ul>
+      {% for candidate in candidates %}
+        <li class="candidate-item">
+          {{ candidate[1] }}
+          <form method="post" style="display:inline;">
+            <input type="hidden" name="candidate_id" value="{{ candidate[0] }}">
+            <button type="submit" name="action" value="delete" class="btn-custom">Delete</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+    <a href="{{ url_for('admin_dashboard') }}" class="btn-custom">Back to Dashboard</a>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Dashboard - VoteVault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      font-family: system-ui, sans-serif; 
+      background: linear-gradient(180deg, #004d40 0%, #002f4b 100%);
+      color: #fff; 
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container { 
+      max-width: 900px; 
+      margin: 30px auto; 
+      background: #00332f; /* container background */
+      padding: 30px 40px; 
+      border-radius: 10px; 
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); 
+    }
+    h2, h3 { 
+      color: #f1c40f; 
+      font-family: 'Press Start 2P', cursive; 
+    }
+    .section { margin-bottom: 35px; }
+    form { margin-bottom: 20px; }
+    label, input, button, select { display: block; margin-bottom: 10px; }
+    input, select { 
+      padding: 10px; 
+      border-radius: 5px; 
+      border: 1px solid #f39c12; 
+      background: #2c3e50; 
+      color: #fff; 
+    }
+    button { 
+      padding: 10px 20px; 
+      border: none; 
+      border-radius: 50px; 
+      cursor: pointer; 
+      font-weight: 600; 
+      transition: background 0.2s, box-shadow 0.2s; 
+      font-family: 'Press Start 2P', cursive; 
+    }
+    .refresh-btn { 
+      background-color: #e74c3c; 
+      color: #fff; 
+    }
+    .refresh-btn:hover {
+      background-color: #c0392b; 
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+    }
+    .declare-btn { 
+      background-color: #2ecc40; 
+      color: #fff; 
+    }
+    .declare-btn:hover {
+      background-color: #27ae60; 
+      box-shadow: 0 0 10px rgba(46, 204, 64, 0.5);
+    }
+    .end-btn { 
+      background-color: #f39c12; 
+      color: #fff; 
+    }
+    .end-btn:hover {
+      background-color: #e67e22; 
+      box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+    }
+    .start-btn { 
+      background-color: #2980b9; 
+      color: #fff; 
+    }
+    .start-btn:hover {
+      background-color: #1f6391; 
+      box-shadow: 0 0 10px rgba(41, 128, 185, 0.5);
+    }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      margin-bottom: 15px; 
+    }
+    th, td { 
+      border: 1px solid #ddd; 
+      padding: 8px; 
+      text-align: left; 
+    }
+    th { 
+      background: #34495e; 
+      color: #f1c40f; 
+    }
+    ul { margin-bottom: 10px; }
+    .actions { margin-top: 10px; }
+    .logout-link { float: right; color: #f1c40f; }
+    .manage-link { margin-left: 10px; color: #f1c40f; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Admin Dashboard</h2>
+    <span class="logout-link"><a href="{{ url_for('logout') }}" style="color: #f1c40f;">Logout</a></span>
+    <p>Welcome, <strong>{{ current_user.email }}</strong></p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li style="color: {% if category == 'danger' %}red{% elif category == 'success' %}green{% else %}white{% endif %};">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="section">
+      <h3>Election Controls</h3>
+      <form method="post" action="{{ url_for('admin_dashboard') }}">
+        <label for="position">Election Position:</label>
+        <input type="text" name="position" id="position" value="{{ settings[3] if settings and settings[3] else '' }}" required>
+        <button type="submit" name="action" value="set_position">Set Position</button>
+      </form>
+
+      <form method="post" action="{{ url_for('admin_dashboard') }}">
+        <input type="hidden" name="action" value="start">
+        <label for="start_time">Start Time:</label>
+        <input type="datetime-local" name="start_time" id="start_time" required>
+        <label for="end_time">End Time:</label>
+        <input type="datetime-local" name="end_time" id="end_time" required>
+        <button type="submit" class="start-btn">Start Voting</button>
+      </form>
+
+      <form method="post" action="{{ url_for('admin_dashboard') }}">
+        <input type="hidden" name="action" value="end">
+        <button type="submit" class="end-btn">End Voting Now</button>
+      </form>
+
+      <form method="post" action="{{ url_for('admin_dashboard') }}">
+        <input type="hidden" name="action" value="refresh">
+        <button type="submit" class="refresh-btn">Refresh Election (Clear All)</button>
+      </form>
+
+      {% if show_declare %}
+      <form method="post" action="{{ url_for('admin_dashboard') }}">
+        <input type="hidden" name="action" value="declare_results">
+        <button type="submit" class="declare-btn">Declare Results</button>
+      </form>
+      {% endif %}
+    </div>
+
+    <div class="section">
+      <h3>Voting Settings</h3>
+      <table>
+        <tr>
+          <th>Voting Open</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Position</th>
+        </tr>
+        <tr>
+          <td>{{ 'Yes' if settings[0] else 'No' }}</td>
+          <td>{{ settings[1] or 'N/A' }}</td>
+          <td>{{ settings[2] or 'N/A' }}</td>
+          <td>{{ settings[3] or 'N/A' }}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>Candidates</h3>
+      <table>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+        </tr>
+        {% for candidate in candidates %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ candidate[1] }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <a class="manage-link" href="{{ url_for('manage_candidates') }}">Manage Candidates</a>
+    </div>
+
+    <div class="section">
+      <h3>Votes Cast</h3>
+      <table>
+        <tr>
+          <th>#</th>
+          <th>Vote (Decrypted)</th>
+        </tr>
+        {% for v in votes %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ v }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>Vote Count Per Candidate</h3>
+      <table>
+        <tr>
+          <th>Candidate</th>
+          <th>Votes</th>
+        </tr>
+        {% for candidate, count in vote_count.items() %}
+        <tr>
+          <td>{{ candidate }}</td>
+          <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</body>
+</html>

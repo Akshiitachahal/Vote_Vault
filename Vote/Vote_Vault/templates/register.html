@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Register - VoteVault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  />
+  <style>
+    /* Full height and flex center */
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* New color scheme: deep teal to navy gradient with soft gold highlights */
+      background: linear-gradient(135deg, #004d40, #002f4b);
+      background-size: 600% 600%;
+      animation: gradientShift 20s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* Floating "VOTEVAULT" text above box with gold gradient and glow */
+    .floating-text {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 3.2rem;
+      background: linear-gradient(90deg, #ffd369, #fbcf91);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow:
+         0 0 10px #ffce54,
+         0 0 20px #f1c40f,
+         0 0 30px #a67c00,
+         0 0 40px #f39c12;
+      margin-bottom: 40px;
+      animation: floatMove 3s ease-in-out infinite, glowPulse 3s infinite alternate;
+      letter-spacing: 5px;
+      user-select: none;
+      text-transform: uppercase;
+    }
+
+    @keyframes floatMove {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+    @keyframes glowPulse {
+      0% {
+        text-shadow:
+         0 0 10px #ffce54,
+         0 0 20px #f1c40f,
+         0 0 30px #a67c00,
+         0 0 40px #f39c12;
+      }
+      100% {
+        text-shadow:
+         0 0 20px #ffe066,
+         0 0 30px #f7dc6f,
+         0 0 40px #d4ac0d,
+         0 0 50px #c39b00;
+      }
+    }
+
+    /* Container with watery texture effect and new colors */
+    .register-container {
+      position: relative;
+      max-width: 400px;
+      width: 90%;
+      padding: 40px 30px;
+      border-radius: 20px;
+      text-align: center;
+      color: #fff;
+      overflow: hidden;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+      background: #00332f; /* dark teal base */
+      border: 1px solid rgba(255, 215, 0, 0.3); /* subtle gold border */
+    }
+
+    /* Water texture overlay with opacity */
+    .register-container::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: url('https://i.imgur.com/wJ6W7Il.png') repeat;
+      background-size: 150px 150px;
+      animation: waterMove 20s linear infinite;
+      opacity: 0.1;
+      pointer-events: none;
+      border-radius: 20px;
+      z-index: 0;
+      filter: hue-rotate(90deg) saturate(1.5);
+    }
+
+    @keyframes waterMove {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 150px 150px;
+      }
+    }
+
+    /* Content above overlay */
+    .register-container > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Register title styling */
+    .register-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: #ffce54;
+      text-shadow:
+         0 0 8px #ffd369,
+         0 0 16px #f1c40f;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    label {
+      font-weight: 600;
+      color: #f7dc6f;
+      text-shadow: 0 0 3px #b7950b;
+    }
+
+    input.form-control {
+      background: rgba(255 255 255 / 0.1);
+      border: 1.5px solid rgba(255 215 0 / 0.6);
+      border-radius: 15px;
+      color: #ffefa0;
+      box-shadow: inset 0 0 5px rgba(255 200 0 / 0.4);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      font-size: 1rem;
+    }
+
+    input.form-control::placeholder {
+      color: rgba(255 255 200 / 0.7);
+    }
+
+    input.form-control:focus {
+      background: rgba(255 255 255 / 0.25);
+      border-color: #ffd700;
+      box-shadow:
+        0 0 8px #ffd700,
+        inset 0 0 8px rgba(255 255 224 / 0.7);
+      color: #fff8b8;
+      outline: none;
+    }
+
+    .btn-custom {
+      background: linear-gradient(135deg, #ffd369, #b8860b);
+      border: none;
+      border-radius: 30px;
+      padding: 12px 0;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #3b2f00;
+      box-shadow:
+        0 4px 15px rgba(218, 165, 32, 0.7),
+        inset 0 -3px 5px rgba(218, 165, 32, 0.5);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-custom:hover, .btn-custom:focus {
+      background: linear-gradient(135deg, #b8860b, #7a5200);
+      box-shadow:
+        0 6px 20px rgba(184, 134, 11, 0.85),
+        inset 0 -3px 5px rgba(184, 134, 11, 0.75);
+      outline: none;
+      color: #fff;
+    }
+
+    .alert {
+      margin-bottom: 1.2rem;
+      border-radius: 15px;
+      border: 1px solid #b8860b;
+      background-color: rgba(184, 134, 11, 0.15);
+      color: #ffef9f;
+      font-weight: 600;
+      box-shadow: 0 0 8px rgba(184, 134, 11, 0.6);
+    }
+
+    .register-link {
+      margin-top: 1.5rem;
+      display: block;
+      color: #ffd369;
+      font-weight: 600;
+      text-shadow:
+        0 0 5px #b8860b;
+      transition: color 0.3s ease;
+    }
+    .register-link:hover {
+      color: #b8860b;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-text">VOTEVAULT</div>
+  <div class="register-container">
+    <h2 class="register-title">Register</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+            <li style="color: {% if category == 'danger' %}red{% elif category == 'success' %}green{% else %}black{% endif %};">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <form action="{{ url_for('register') }}" method="post">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" class="form-control" name="email" required placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" class="form-control" name="password" required placeholder="Enter your password">
+      </div>
+      <button type="submit" class="btn btn-custom btn-block">Register</button>
+    </form>
+    <p>Already have an account? <a class="register-link" href="{{ url_for('home') }}">Login here</a></p>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
